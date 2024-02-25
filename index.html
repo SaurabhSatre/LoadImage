@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: whitesmoke;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .image-container {
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Select Image</h1>
+        <div class="image-grid" id="imageGrid"></div>
+    </div>
+
+    <script>
+        const imageData = [
+            { "title": "Mountain Landscape", "subtitle": "Scenic View", "image": "https://fastly.picsum.photos/id/167/300/300.jpg?hmac=pUvtrq_DnPmk3ui2smKHRtf7_EqebkD3wjh_9pE22d0" },
+            { "title": "Sunset Beach", "subtitle": "Golden Hour", "image": "https://fastly.picsum.photos/id/1016/300/300.jpg?hmac=bjfLAoQLUHytpHr4nBTho_zxJd0gRuvCAv9U5rXpnNA" },
+            { "title": "Forest Trail", "subtitle": "Nature Walk", "image": "https://fastly.picsum.photos/id/1065/300/300.jpg?hmac=f2j0pnNQO9WHnUrPHf-QPIVOAZ2PcwluUoCOIPCopAw" },
+            { "title": "Urban Jungle", "subtitle": "Cityscape", "image": "https://fastly.picsum.photos/id/743/300/300.jpg?hmac=etOxwclMseIaDm0uF76VFeu27d7MXfDkNVwZQkQ_KVI" },
+            { "title": "River Reflections", "subtitle": "Waterfront", "image": "https://fastly.picsum.photos/id/740/300/300.jpg?hmac=bKTab2yswKA35NDHdjfi1yfFiBMQfkJaLMu1krUlSNM" },
+            { "title": "Mountain Summit", "subtitle": "Panoramic View", "image": "https://fastly.picsum.photos/id/530/300/300.jpg?hmac=E0WX6TeTPW3v7qw1eFPuAhviW2a2PSFAQSF48bZuEkY" },
+            { "title": "Misty Forest", "subtitle": "Enchanted Woods", "image": "https://fastly.picsum.photos/id/17/300/300.jpg?hmac=KxvSSOugjB6gpoBNWDjhfj5DxC8fvBVrp-vDzzFAMPo" },
+            { "title": "Lakeside Retreat", "subtitle": "Tranquil Waters", "image": "https://fastly.picsum.photos/id/139/300/300.jpg?hmac=pkjmbFZuiSwWrscQ38cTv3IEuJQbsAHlh0haDEIVme4" },
+            { "title": "Sunrise Serenity", "subtitle": "Morning Glow", "image": "https://fastly.picsum.photos/id/25/300/300.jpg?hmac=hXirsaKumNCLu7iGSrMI_RkAEfXF01DGx6c4wzBUpXs" },
+            { "title": "Autumn Colors", "subtitle": "Fall Foliage", "image": "https://fastly.picsum.photos/id/538/300/300.jpg?hmac=lKNG7oRlEgp83zfqWtzbicMhIICA6pw0HAl3QmkeZGs" },
+            { "title": "Mountain Reflections", "subtitle": "Alpine Lake", "image": "https://fastly.picsum.photos/id/678/300/300.jpg?hmac=GPROD55lPhHCQgcOx7WsyIuDQ7tzz8sh-s_IvCxPwkw" },
+            { "title": "Forest Adventure", "subtitle": "Scenic Overlook", "image": "https://fastly.picsum.photos/id/1073/300/300.jpg?hmac=wa-RILopuOVt6raNQBFfaUFmlx_4A1fUwzlwWkIGk1g" },
+            { "title": "Meadow Bliss", "subtitle": "Vibrant Landscape", "image": "https://fastly.picsum.photos/id/625/300/300.jpg?hmac=shtx90AVbywLUKxS33Mj8uL8irLdrejPvXEgBNuDyWc" },
+            { "title": "Ocean Sunset", "subtitle": "Coastal Retreat", "image": "https://fastly.picsum.photos/id/704/300/300.jpg?hmac=xm4vkCgyqSsOZV7BId7MrPh6ayEtCCSVKxddUe1M3KU" },
+            { "title": "Mountain Majesty", "subtitle": "Peak Experience", "image": "https://fastly.picsum.photos/id/490/300/300.jpg?hmac=oBdjxHHdkt9DY1EXZHKI1PHYqybUP43f3jVW0_dg0FE" },
+            { "title": "River Rapids", "subtitle": "Flowing Waters", "image": "https://fastly.picsum.photos/id/250/300/300.jpg?hmac=mZh9RQOu46-RyeW5J7Jhgjt9pbthzGC7l7Uy9XhFjYk" },
+            { "title": "Sunset Silhouette", "subtitle": "Evening Glow", "image": "https://fastly.picsum.photos/id/377/300/300.jpg?hmac=d28_1erMZCjVRdfn5Te43gEBADw6-IJOtlpT-Vc8yJE" },
+            { "title": "Tropical Paradise", "subtitle": "Island Escape", "image": "https://fastly.picsum.photos/id/425/300/300.jpg?hmac=AVc8mv_OkgDoD_SpY-iHnp1lwiqt2jYFrQz7vdTMU2I" },
+            { "title": "Mountain Vista", "subtitle": "Scenic Outlook", "image": "https://fastly.picsum.photos/id/533/300/300.jpg?hmac=2IKahPfwQQAogvh77xn3cWFO7CcAnTejuf1hGKSi3fI" },
+            { "title": "Wildflower Meadow", "subtitle": "Colorful Landscape", "image": "https://fastly.picsum.photos/id/832/300/300.jpg?hmac=8TfMb2-1L5SsFG4ok20Q-FA2x7kdntziF0LTWzIlaJs" },
+            { "title": "Wonderland", "subtitle": "Cascade Adventure", "image": "https://fastly.picsum.photos/id/434/300/300.jpg?hmac=mQRtM4sxfByVWBdLXBAuPJdAB8pkVGvTD0QNrEKxoJM" },
+            { "title": "Sunset Pier", "subtitle": "Evening Stroll", "image": "https://fastly.picsum.photos/id/445/300/300.jpg?hmac=5O-DNt4KzxZfuV5dgp9fNb7_sc3Tg6ZKtH6Bv6oktOQ" },
+            { "title": "Mountain Meadow", "subtitle": "Alpine Paradise", "image": "https://fastly.picsum.photos/id/41/300/300.jpg?hmac=btJpFIxxGUDXvakI9MK1mRAP0Mmwhgk_o34Ps2vkhxA" },
+            { "title": "Autumn Serenade", "subtitle": "Fall Colors", "image": "https://fastly.picsum.photos/id/397/300/300.jpg?hmac=lpy91aY2W7lNCsQn2AqI99lxfbP_UIwZz0XdUahIdhE" },
+            { "title": "Misty Mountain", "subtitle": "Foggy Summit", "image": "https://fastly.picsum.photos/id/282/300/300.jpg?hmac=0hD9MPJFGhh7JPyvYdwNJxeOqFl2Q41y71ZvtZ1ybJQ" },
+            { "title": "Dog", "subtitle": "Morning Seaside", "image": "https://fastly.picsum.photos/id/659/300/300.jpg?hmac=PxmRQ6eGErgkq4LdPwpld0eYGMsMCKOCtyJF6wXhXDM" }
+        ];
+
+        function loadImages() {
+            const imageGrid = document.getElementById('imageGrid');
+            imageData.forEach(item => {
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('image-container');
+
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = 'Image';
+                imageContainer.appendChild(img);
+
+                const title = document.createElement('h2');
+                title.textContent = item.title; 
+                imageContainer.appendChild(title);
+
+                const subtitle = document.createElement('p');
+                subtitle.textContent = item.subtitle;
+                imageContainer.appendChild(subtitle);
+
+                imageGrid.appendChild(imageContainer);
+            });
+        }
+
+        window.onload = loadImages;
+    </script>
+
+</body>
+
+</html>
+
